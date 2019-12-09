@@ -39,25 +39,27 @@ import org.exist.xquery.value.Sequence;
 import org.exist.xquery.value.SequenceType;
 import org.exist.xquery.value.Type;
 
+import static org.exist.xquery.FunctionDSL.*;
+
 /**
  * @author wolf, agh
  */
 public class FunDocumentURI extends Function {
 
-    public final static FunctionSignature[] signature = {
-            new FunctionSignature(
-                    new QName("document-uri", Function.BUILTIN_FUNCTION_NS),
-                    "Returns the absolute URI of the resource from which the " +
-                            "document node $document-node was constructed. " +
-                            "If none such URI exists returns the empty sequence. " +
-                            "If $document-node is the empty sequence, returns the empty sequence.",
-                    new SequenceType[]{
-                            new FunctionParameterSequenceType("document-node", Type.NODE,
-                                    Cardinality.ZERO_OR_ONE, "The document node")
-                    },
-                    new FunctionReturnSequenceType(Type.ANY_URI, Cardinality.ZERO_OR_ONE,
-                            "the document URI of $document-node")
-            )};
+    private static final String FS_DOCUMENT_URI_NAME = "document-uri";
+    private static final FunctionParameterSequenceType FS_DOCUMENT_URI_OPT_PARAM_NODE = optParam("node", Type.NODE, "The input document-node");
+    static final FunctionSignature[] FS_DOCUMENT_URI = functionSignatures(
+            new QName(FS_DOCUMENT_URI_NAME, Function.BUILTIN_FUNCTION_NS),
+            "Returns the absolute URI of the resource from which the " +
+                    "document node $document-node was constructed. " +
+                    "If none such URI exists returns the empty sequence. " +
+                    "If $document-node is the empty sequence, returns the empty sequence.",
+            returnsOpt(Type.ANY_URI, "The document URI of $document-node"),
+            arities(
+                    arity(),
+                    arity(FS_DOCUMENT_URI_OPT_PARAM_NODE)
+            )
+    );
 
     public FunDocumentURI(final XQueryContext context, final FunctionSignature signature) {
         super(context, signature);
