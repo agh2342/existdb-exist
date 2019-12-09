@@ -44,7 +44,7 @@ import org.exist.xquery.value.Type;
  */
 public class FunDocumentURI extends Function {
 
-    public final static FunctionSignature signature =
+    public final static FunctionSignature[] signature = {
             new FunctionSignature(
                     new QName("document-uri", Function.BUILTIN_FUNCTION_NS),
                     "Returns the absolute URI of the resource from which the " +
@@ -57,7 +57,7 @@ public class FunDocumentURI extends Function {
                     },
                     new FunctionReturnSequenceType(Type.ANY_URI, Cardinality.ZERO_OR_ONE,
                             "the document URI of $document-node")
-            );
+            )};
 
     public FunDocumentURI(final XQueryContext context, final FunctionSignature signature) {
         super(context, signature);
