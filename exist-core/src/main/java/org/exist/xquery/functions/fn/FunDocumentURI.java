@@ -59,14 +59,14 @@ public class FunDocumentURI extends Function {
                             "the document URI of $document-node")
             );
 
-    public FunDocumentURI(XQueryContext context) {
+    public FunDocumentURI(final XQueryContext context) {
         super(context, signature);
     }
 
     /* (non-Javadoc)
      * @see org.exist.xquery.Expression#eval(org.exist.xquery.StaticContext, org.exist.dom.persistent.DocumentSet, org.exist.xquery.value.Sequence, org.exist.xquery.value.Item)
      */
-    public Sequence eval(Sequence contextSequence, Item contextItem) throws XPathException {
+    public Sequence eval(final Sequence contextSequence, final Item contextItem) throws XPathException {
         if (context.getProfiler().isEnabled()) {
             context.getProfiler().start(this);
             context.getProfiler().message(this, Profiler.DEPENDENCIES,
