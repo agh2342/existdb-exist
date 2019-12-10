@@ -23,20 +23,12 @@ import org.exist.dom.persistent.NodeProxy;
 import org.exist.dom.QName;
 import org.exist.dom.memtree.DocumentImpl;
 import org.exist.xmldb.XmldbURI;
-import org.exist.xquery.Cardinality;
-import org.exist.xquery.Dependency;
-import org.exist.xquery.Function;
-import org.exist.xquery.FunctionSignature;
-import org.exist.xquery.Profiler;
-import org.exist.xquery.XPathException;
-import org.exist.xquery.XQueryContext;
+import org.exist.xquery.*;
 import org.exist.xquery.value.AnyURIValue;
-import org.exist.xquery.value.FunctionReturnSequenceType;
 import org.exist.xquery.value.FunctionParameterSequenceType;
 import org.exist.xquery.value.Item;
 import org.exist.xquery.value.NodeValue;
 import org.exist.xquery.value.Sequence;
-import org.exist.xquery.value.SequenceType;
 import org.exist.xquery.value.Type;
 
 import static org.exist.xquery.FunctionDSL.*;
@@ -82,20 +74,45 @@ public class FunDocumentURI extends Function {
                         "CONTEXT ITEM", contextItem.toSequence());
             }
         }
-        final Sequence seq = getArgument(0).eval(contextSequence, contextItem);
-        Sequence result = Sequence.EMPTY_SEQUENCE;
-        if (!seq.isEmpty()) {
+
+        final Sequence seq;
+        if (getArgumentCount() == 0) {
+            seq = null;
+            if (contextItem == null) {
+                throw new XPathException("XPDY0002, dynamic context not present.");
+            }
+        } else {
+            seq = getArgument(0).eval(contextSequence, contextItem);
+        }
+
+        Sequence result = null;
+        if (seq == null) {
+            result = new AnyURIValue(((NodeProxy) contextItem).getOwnerDocument().getURI());
+            bp();
+        } else if (seq.isEmpty()) {
+            //DONE: fn(())
+            result = Sequence.EMPTY_SEQUENCE;
+            bp();
+        } else if (seq.getItemType() != Type.DOCUMENT) {
+            //DONE
+            result = Sequence.EMPTY_SEQUENCE;
+            bp();
+        } else {
+            //DONE: fn($arg), $arg := $doc()
+            bp();
+        }
+
+        if (result == null) {
             final NodeValue value = (NodeValue) seq.itemAt(0);
             if (value.getImplementationType() == NodeValue.PERSISTENT_NODE) {
                 final NodeProxy node = (NodeProxy) value;
-                //Returns the empty sequence if the node is not a document node. 
+                //Returns the empty sequence if the node is not a document node.
                 if (node.isDocument()) {
                     final XmldbURI path = node.getOwnerDocument().getURI();
                     result = new AnyURIValue(path);
                 }
             } else {
-                if (value instanceof DocumentImpl &&
-                        ((DocumentImpl) value).getDocumentURI() != null) {
+                if (value instanceof DocumentImpl && ((DocumentImpl) value).getDocumentURI() != null) {
                     result = new AnyURIValue(((DocumentImpl) value).getDocumentURI());
                 }
             }
@@ -103,6 +120,10 @@ public class FunDocumentURI extends Function {
         if (context.getProfiler().isEnabled()) {
             context.getProfiler().end(this, "", result);
         }
+        bp();
         return result;
+    }
+
+    private void bp() {
     }
 }
