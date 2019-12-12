@@ -67,6 +67,7 @@ public class FnModule extends AbstractInternalModule {
         new FunctionDef(FunDeepEqual.signatures[0], FunDeepEqual.class),
         new FunctionDef(FunDeepEqual.signatures[1], FunDeepEqual.class),
         new FunctionDef(FunDefaultCollation.signature, FunDefaultCollation.class),
+        new FunctionDef(FunDefaultLanguage.FS_DEFAULT_LANGUAGE, FunDefaultLanguage.class),
         new FunctionDef(FunDistinctValues.signatures[0], FunDistinctValues.class),
         new FunctionDef(FunDistinctValues.signatures[1], FunDistinctValues.class),
         new FunctionDef(FunDoc.signature, FunDoc.class),
