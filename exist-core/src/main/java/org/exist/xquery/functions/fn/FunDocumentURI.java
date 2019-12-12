@@ -88,18 +88,14 @@ public class FunDocumentURI extends Function {
         Sequence result = null;
         if (seq == null) {
             result = new AnyURIValue(((NodeProxy) contextItem).getOwnerDocument().getURI());
-            bp();
         } else if (seq.isEmpty()) {
             //DONE: fn(())
             result = Sequence.EMPTY_SEQUENCE;
-            bp();
         } else if (seq.getItemType() != Type.DOCUMENT) {
             //DONE
             result = Sequence.EMPTY_SEQUENCE;
-            bp();
         } else {
             //DONE: fn($arg), $arg := $doc()
-            bp();
         }
 
         if (result == null) {
@@ -120,10 +116,6 @@ public class FunDocumentURI extends Function {
         if (context.getProfiler().isEnabled()) {
             context.getProfiler().end(this, "", result);
         }
-        bp();
         return result;
-    }
-
-    private void bp() {
     }
 }
