@@ -87,19 +87,22 @@ public class FunDocumentURI extends Function {
 
         Sequence result = null;
         if (seq == null) {
+            //called without argument
             if (contextItem instanceof NodeProxy && ((NodeProxy) contextItem).getOwnerDocument() != null) {
+                //non in-memory node
                 result = new AnyURIValue(((NodeProxy) contextItem).getOwnerDocument().getURI());
             } else {
+                //in-memory node
                 result = Sequence.EMPTY_SEQUENCE;
             }
         } else if (seq.isEmpty()) {
-            //DONE: fn(())
+            //called with empty-sequence as argument
             result = Sequence.EMPTY_SEQUENCE;
         } else if (seq.getItemType() != Type.DOCUMENT) {
-            //DONE
+            //called with argument that is not a document
             result = Sequence.EMPTY_SEQUENCE;
         } else {
-            //DONE: fn($arg), $arg := $doc()
+            //called with argument that is a document, retrieve result later
         }
 
         if (result == null) {
