@@ -87,7 +87,11 @@ public class FunDocumentURI extends Function {
 
         Sequence result = null;
         if (seq == null) {
-            result = new AnyURIValue(((NodeProxy) contextItem).getOwnerDocument().getURI());
+            if (contextItem instanceof NodeProxy && ((NodeProxy) contextItem).getOwnerDocument() != null) {
+                result = new AnyURIValue(((NodeProxy) contextItem).getOwnerDocument().getURI());
+            } else {
+                result = Sequence.EMPTY_SEQUENCE;
+            }
         } else if (seq.isEmpty()) {
             //DONE: fn(())
             result = Sequence.EMPTY_SEQUENCE;
