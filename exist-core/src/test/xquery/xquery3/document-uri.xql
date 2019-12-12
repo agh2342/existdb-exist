@@ -63,7 +63,6 @@ function du:document-uri-test-node-nonempty-context-explicit() {
 };
 
 declare
-    %test:pending('TODO: DocumentImpl cannot be cast to NodeProxy')
     %test:assertEmpty
 function du:document-uri-test-node-nonempty-context-implicit() {
     let $node := <null/>
@@ -85,7 +84,6 @@ function du:document-uri-test-document-inmemory-context-explicit() {
 };
 
 declare
-    %test:pending('TODO: DocumentImpl cannot be cast to NodeProxy')
     %test:assertEmpty
 function du:document-uri-test-document-inmemory-context-implicit() {
     let $doc := fn:parse-xml('<boolean>true</boolean>')
